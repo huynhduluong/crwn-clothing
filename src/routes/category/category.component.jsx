@@ -7,12 +7,12 @@ import './category.styles.scss'
 
 export default function Category() {
     const { category } = useParams()
-    const categoriesMap = useSelector(selectCategoriesMap)
-    const [products, setProducts] = useState(categoriesMap[category])
+    const categories = useSelector(selectCategoriesMap)
+    const [products, setProducts] = useState(categories[category])
 
     useEffect(() => {
-        setProducts(categoriesMap[category])
-    }, [categoriesMap, category])
+        setProducts(categories[category])
+    }, [categories, category])
 
     return (
         <Fragment>

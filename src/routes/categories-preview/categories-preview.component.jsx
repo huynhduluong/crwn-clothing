@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { selectCategoriesMap } from '../../store/categories/category.selector';
 
 export const CategoriesPreview = () => {
-    const categoriesMap = useSelector(selectCategoriesMap)
+    const categories = useSelector(selectCategoriesMap)
     return <Fragment>
-        {Object.keys(categoriesMap).map((title) => {
-            const products = categoriesMap[title]
+        {Object.keys(categories).map((title) => {
+            const products = categories[title]
             return <CategoryPreview
                 title={title}
                 products={products}
