@@ -3,7 +3,9 @@ import logger from 'redux-logger'
 import { rootReducer } from './root-reducer'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
-import thunk from 'redux-thunk'
+import createSagaMiddleware from 'redux-saga'
+import { rootSaga } from './root-saga'
+
 
 const persistConfig = {
     key: 'root',
@@ -11,9 +13,14 @@ const persistConfig = {
     whitelist: ['cart']
 }
 
+const sagaMiddlewares = createSagaMiddleware()
+
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const middleWares = [process.env.NODE_ENV !== 'development' && logger, thunk].filter(Boolean);
+const middleWares = [
+    process.env.NODE_ENV !== 'production' && logger,
+    sagaMiddlewares
+].filter(Boolean);
 
 const composeEnhancer =
     (process.env.NODE_ENV !== 'production' &&
@@ -24,5 +31,7 @@ const composeEnhancer =
 const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares))
 
 export const store = createStore(persistedReducer, undefined, composedEnhancers)
+
+sagaMiddlewares.run(rootSaga)
 
 export const persistor = persistStore(store)
